@@ -1,17 +1,9 @@
 import functools
 import logging
 import time
-import warnings
-
-from pint import UnitStrippedWarning as pint_UnitStrippedWarning
 
 __all__ = ['add_handle', 'log', 'log_decorator', 'timer']
 
-for warning in [
-    # unitstrippedwarning: the unit of the quantity is stripped when downcasting to ndarray.
-    pint_UnitStrippedWarning,
-]:
-    warnings.filterwarnings('ignore', category=warning)
 
 for pack in ['matplotlib']:
     logging.getLogger(pack).setLevel(logging.ERROR)

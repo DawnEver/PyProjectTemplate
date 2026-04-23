@@ -1,6 +1,6 @@
 # PyProjectTemplate
 
-Extensible Python 3.12+ starter kit that ships with typed configuration, pint-backed physical quantities, structured logging, docs generation, and a fully wired test + lint stack. Use it as-is for simulation/analysis tooling or clone it as a baseline for new services.
+Extensible Python 3.12+ starter kit that ships with typed configuration, structured logging, docs generation, and a fully wired test + lint stack. Use it as-is for simulation/analysis tooling or clone it as a baseline for new services.
 
 > **Quick start**
 > 1. `uv pip install -e ".[dev]"` (or `pip install -e ".[dev]"`)
@@ -9,10 +9,9 @@ Extensible Python 3.12+ starter kit that ships with typed configuration, pint-ba
 
 ## Highlights
 
-- **Typed config loader** (`app.utils.config`) powered by `pydantic` + `pint`, ensuring every numeric field carries validated units.
+- **Typed config loader** (`app.utils.config`) powered by `pydantic`, ensuring every numeric field carries validated units.
 - **Safety rails for I/O** (`app.utils.file_io`) that clone default TOML configs into `usr/local/` and keep reports/logs under `output/`.
 - **Logging-first runtime** with rotating folders (`output/logs/<YYYY-MM-DD>/<HH>.log`) and consistent console/file formats configurable from TOML.
-- **Quantity toolbox** (`app.utils.quantities`) offering reusable electromagnetic & mechanical units, conversions to/from numpy arrays, and helpers for geometry points.
 - **Production-ready packaging**: `setuptools-scm` for versioning, console entry point (`app`), Ruff formatting, pytest + coverage, and optional dev extras.
 - **Docs on tap**: `scripts/pdoc.py` regenerates the searchable API site in `docs/` (already built for offline browsing), complete with Mermaid + MathJax.
 
@@ -20,7 +19,7 @@ Extensible Python 3.12+ starter kit that ships with typed configuration, pint-ba
 
 ```
 ├─ src/app/                 # Library code & CLI entry point (python -m app)
-│   └─ utils/               # Config, logging, file IO, quantities, visualization helpers
+│   └─ utils/               # Config, logging, file IO, visualization helpers
 ├─ tests/                   # Unit / integration / e2e pytest suites (+ doctests)
 ├─ scripts/pdoc.py          # API doc generator and asset synchronizer
 ├─ usr/                     # User-level configs (local overrides vs defaults)
@@ -65,10 +64,6 @@ Prefer pip? Substitute `uv pip ...` with `pip ...`; everything else is unchanged
 ## Configuration
 
 - User-editable settings live in `usr/local/config.toml`. If missing, it is cloned from `usr/default/default.config.toml` the first time `app.utils.config` loads.
-- Schemas are defined via `Config(BaseModel_with_q)` ensuring:
-	- automatic conversion of scalar inputs into pint quantities (e.g., `"10 mm"` → `Quantity`)
-	- serialization back to TOML/JSON with units intact
-	- numpy arrays emitted as vanilla lists when dumping configs or reports
 - `PathData` centralizes canonical directories (logs, reports, default figs) so utility modules never hard-code paths.
 
 To introduce new settings, extend `Core` or `Utils`, regenerate docs (`python scripts/pdoc.py`), and document defaults in `usr/default/default.config.toml`.

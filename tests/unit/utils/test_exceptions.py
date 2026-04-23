@@ -4,7 +4,6 @@ import pytest
 
 from app.utils.exceptions import (
     ParameterException,
-    QuantityException,
     deprecated,
     not_implemented,
 )
@@ -17,13 +16,6 @@ def test_parameter_exception(mock_log):
     assert str(exception) == 'ParameterException: Invalid parameter'
     mock_log.assert_called_once_with('ParameterException: Invalid parameter', level='ERROR')
 
-
-@patch('app.utils.exceptions.log')
-def test_quantity_exception(mock_log):
-    """Test QuantityException."""
-    exception = QuantityException('Invalid quantity')
-    assert str(exception) == 'QuantityException: Invalid quantity'
-    mock_log.assert_called_once_with('QuantityException: Invalid quantity', level='ERROR')
 
 
 def test_not_implemented():

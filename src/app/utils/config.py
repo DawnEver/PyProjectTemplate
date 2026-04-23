@@ -5,8 +5,10 @@ Singleton pattern: ensure configuration consistency.
 import datetime
 from pathlib import Path
 
+import numpy as np
+from pydantic import BaseModel, ConfigDict
+
 from .file_io import check_path, read_toml, save_toml
-from .quantities import BaseModel_with_q
 
 __all__ = ['CONF', 'PathData', 'load_config', 'save_config']
 
@@ -74,10 +76,32 @@ for target_path, default_path in [
     check_path(target_path=target_path, default_path=default_path)
 
 
-class Core(BaseModel_with_q): ...
+pydantic_config_dict = ConfigDict(
+    str_to_lower=True,
+    strict=True,
+    extra='forbid',
+    arbitrary_types_allowed=True,
+)
 
 
-class Utils(BaseModel_with_q):
+class ModifiedBaseModel(BaseModel):
+    """BaseModel serialization of numpy.array to list."""
+
+    model_config = pydantic_config_dict
+
+    def model_dump(self, **kwargs):
+        data = super().model_dump(**kwargs)
+        # Convert numpy.array to list
+        for k, v in data.items():
+            if isinstance(v, np.ndarray):
+                data[k] = v.tolist()
+        return data
+
+
+class Core(ModifiedBaseModel): ...
+
+
+class Utils(ModifiedBaseModel):
     r"""Attributes:
     log_file_format(str): Log file format.
         Use double quotes, supports "\n" and "\t".
@@ -102,7 +126,7 @@ class Utils(BaseModel_with_q):
     text_editor_command: str = 'notepad.exe'
 
 
-class Config(BaseModel_with_q):
+class Config(ModifiedBaseModel):
     """Global configuration file."""
 
     core: Core

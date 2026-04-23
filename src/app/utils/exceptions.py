@@ -1,6 +1,6 @@
 from .logger import log
 
-__all__ = ['ParameterException', 'QuantityException', 'deprecated', 'not_implemented']
+__all__ = ['ParameterException', 'deprecated', 'not_implemented']
 
 
 class ParameterException(Exception):
@@ -11,18 +11,6 @@ class ParameterException(Exception):
 
     def __str__(self) -> str:
         msg = f'ParameterException: {self.message}'
-        log(msg, level='ERROR')
-        return msg
-
-
-class QuantityException(Exception):
-    """Exception for unexpected parameters, read quantity in pint."""
-
-    def __init__(self, message='') -> None:
-        self.message = message
-
-    def __str__(self) -> str:
-        msg = f'QuantityException: {self.message}'
         log(msg, level='ERROR')
         return msg
 

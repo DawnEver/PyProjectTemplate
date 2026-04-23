@@ -19,7 +19,7 @@ maintainers = [
 ]
 dependencies = [
     "rtoml","matplotlib","numpy",
-    "pint","pydantic"
+    "pydantic"
 ]
 
 [project.optional-dependencies]
